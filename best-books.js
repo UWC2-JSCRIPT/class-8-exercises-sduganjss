@@ -11,30 +11,38 @@ const urlStart = 'https://api.nytimes.com/svc/books/v3/lists/'
 
 const urlEnd = '/hardcover-fiction.json?api-key='
 
-///lists/2019-01-20/hardcover-fiction.json
 
 formEl.addEventListener('submit', function(e) {
   e.preventDefault();
 
-  const year = yearEl.value;
-  const month = monthEl.value;
-  const day = dateEl.value;
+  
+  const dateCombined = `${yearEl.value}-${monthEl.value}-${dateEl.value}`
 
-  const dateCombined = `${year}-${month}-${day}`
+  const urlCombined = urlStart + dateCombined + urlEnd + apiKey;
 
-  const urlCombined = urlStart + dateCombined + urlEnd;
+ // Fetch bestselling books for date and add top 5 to page
 
-  console.log(urlCombined);
-  // Fetch bestselling books for date and add top 5 to page
-/**
-  const dataFetch = fetch('url');
+  const dataFetch = fetch(urlCombined);
 
   dataFetch.then((data) => {
-    console.log(data)
     return data.json()
   })
   .then((data) => {
-    console.log("second then callback", data)
+    const bookEl = document.getElementById('books-container');
+   
+     for (let i = 0; i < 5; i++) {
+      let title = data.results.books[i].title;
+      let author = data.results.books[i].author;
+      let description = data.results.books[i].description;
+
+      let bookDisplay = `Title: ${title}  
+      Author: ${author} 
+      Description: ${description}
+      `;
+
+      bookEl.innerText += bookDisplay;
+
+    }
   })
-   */
+   
 });
